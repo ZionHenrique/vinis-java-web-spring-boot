@@ -49,7 +49,7 @@
             <tbody>
                 <tr th:each="compra : ${compras}">
                     <td th:text="${compra.id}"></td>
-                    <td th:text="${#temporals.format(compra.dataCompra, 'dd/MM/yyyy HH:mm')}"></td>
+                    <td th:text="${compra.dataCompra != null ? #temporals.format(compra.dataCompra, 'dd/MM/yyyy HH:mm') : '-'}"></td>
                     <td th:text="${compra.cliente != null ? compra.cliente.nome : 'Cliente removido'}"></td>
                     <td th:text="${'R$ ' + #numbers.formatDecimal(compra.valorTotal, 1, 2)}"></td>
                     <td th:text="${compra.itens.size()}"></td>

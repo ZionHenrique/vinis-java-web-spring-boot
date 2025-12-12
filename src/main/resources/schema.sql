@@ -1,8 +1,8 @@
--- Criação das tabelas do banco de dados H2
+-- Criação das tabelas do banco de dados (MySQL e H2)
 
 -- Tabela CLIENTE
 CREATE TABLE IF NOT EXISTS cliente (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     cpf VARCHAR(255) NOT NULL UNIQUE,
@@ -11,18 +11,18 @@ CREATE TABLE IF NOT EXISTS cliente (
 
 -- Tabela VINIL
 CREATE TABLE IF NOT EXISTS vinil (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(255) NOT NULL,
     artista VARCHAR(255) NOT NULL,
     genero VARCHAR(255) NOT NULL,
-    codigo INTEGER NOT NULL UNIQUE,
+    codigo INT NOT NULL UNIQUE,
     preco_venda FLOAT NOT NULL,
-    qtd_disponivel INTEGER NOT NULL
+    qtd_disponivel INT NOT NULL
 );
 
 -- Tabela FUNCIONARIO
 CREATE TABLE IF NOT EXISTS funcionario (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     nome VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     cpf VARCHAR(255) NOT NULL UNIQUE,
@@ -32,8 +32,8 @@ CREATE TABLE IF NOT EXISTS funcionario (
 
 -- Tabela COMPRA
 CREATE TABLE IF NOT EXISTS compra (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    data_compra TIMESTAMP NOT NULL,
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    data_compra DATETIME NOT NULL,
     cliente_id BIGINT NOT NULL,
     valor_total FLOAT NOT NULL,
     FOREIGN KEY (cliente_id) REFERENCES cliente(id)
@@ -41,8 +41,8 @@ CREATE TABLE IF NOT EXISTS compra (
 
 -- Tabela ITEM_COMPRA (Join table between COMPRA and VINIL)
 CREATE TABLE IF NOT EXISTS item_compra (
-    id BIGINT PRIMARY KEY AUTO_INCREMENT,
-    quantidade INTEGER NOT NULL,
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    quantidade INT NOT NULL,
     valor_item FLOAT NOT NULL,
     compra_id BIGINT NOT NULL,
     vinil_id BIGINT NOT NULL,
