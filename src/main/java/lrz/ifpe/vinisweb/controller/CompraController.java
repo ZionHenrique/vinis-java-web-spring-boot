@@ -8,6 +8,7 @@ import lrz.ifpe.vinisweb.repository.CompraRepository;
 import lrz.ifpe.vinisweb.repository.VinilRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,6 +29,7 @@ public class CompraController {
     private VinilRepository vinilRepository;
 
     @GetMapping
+    @Transactional(readOnly = true)
     public String listarCompras(@RequestParam(value = "busca", required = false) String busca, Model model) {
         List<Compra> compras;
         
@@ -51,6 +53,7 @@ public class CompraController {
     }
 
     @PostMapping
+    @Transactional
     public String salvarCompra(@RequestParam Long clienteId,
                                @RequestParam Long vinilId,
                                @RequestParam int quantidade) {
@@ -58,6 +61,10 @@ public class CompraController {
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
         Vinil vinil = vinilRepository.findById(vinilId)
                 .orElseThrow(() -> new RuntimeException("Vinil não encontrado"));
+
+        if (quantidade > vinil.getQtdDisponivel()) {
+            throw new RuntimeException("Quantidade insuficiente em estoque");
+        }
 
         Compra compra = new Compra(new Date(), cliente);
         compra.adicionarItem(vinil, quantidade);
@@ -68,6 +75,7 @@ public class CompraController {
     }
 
     @GetMapping("/{id}")
+    @Transactional(readOnly = true)
     public String detalharCompra(@PathVariable Long id, Model model) {
         Compra compra = compraRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Compra não encontrada"));
