@@ -1,19 +1,24 @@
 package lrz.ifpe.vinisweb.controller;
 
+import java.util.Date;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import lrz.ifpe.vinisweb.model.Cliente;
 import lrz.ifpe.vinisweb.model.Compra;
 import lrz.ifpe.vinisweb.model.Vinil;
 import lrz.ifpe.vinisweb.repository.ClienteRepository;
 import lrz.ifpe.vinisweb.repository.CompraRepository;
 import lrz.ifpe.vinisweb.repository.VinilRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.Date;
-import java.util.List;
 
 @Controller
 @RequestMapping("/compras")
@@ -57,6 +62,9 @@ public class CompraController {
     public String salvarCompra(@RequestParam Long clienteId,
                                @RequestParam Long vinilId,
                                @RequestParam int quantidade) {
+        if (quantidade <= 0) {
+            throw new RuntimeException("Quantidade deve ser maior que zero");
+        }
         Cliente cliente = clienteRepository.findById(clienteId)
                 .orElseThrow(() -> new RuntimeException("Cliente não encontrado"));
         Vinil vinil = vinilRepository.findById(vinilId)
